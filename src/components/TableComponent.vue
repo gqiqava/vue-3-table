@@ -1,7 +1,7 @@
 <template>
   <table class="table table-bordered container mt-5 border" style="border-spacing: 2">
     <tr>
-      <th>
+      <!-- <th>
         მომხმარებელი
         <button type="button" @click="sortDataByName" class="btn btn-light ms-1 p-1 fw-bold">
           ^
@@ -29,6 +29,12 @@
       <th>
         დრო
         <button type="button" @click="sortDataByTime" class="btn btn-light ms-1 p-1 fw-bold">
+          ^
+        </button>
+      </th> -->
+      <th v-for="(singleData, ind) in tableHeaders" :key="ind">
+        {{ singleData }}
+        <button type="button" @click="sortDataByName" class="btn btn-light ms-1 p-1 fw-bold">
           ^
         </button>
       </th>
@@ -90,16 +96,7 @@
       </th>
     </tr>
     <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
-      <td class="ps-1">{{ item.name }}</td>
-      <td>{{ item.number }}</td>
-      <td>{{ item.order }}</td>
-      <td>{{ item.price }} ₾</td>
-      <td>
-        {{ item.details.sauce }},
-        <span v-if="item.details.double_meat">ორმაგი ხორცი</span>
-        <span v-else>სტანდარტული ხორცი</span>
-      </td>
-      <td>{{ item.time }}</td>
+      <td class="" v-for="conc in item">{{ conc }}</td>
     </tr>
   </table>
   <button class="btn btn-success fw-bold ms-5" @click="generateCSV()">Download XLSX</button>
@@ -125,6 +122,7 @@ const props = defineProps({
 
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
+let tableHeaders = Object.keys(userTable.value[0])
 
 watch(
   inputArr,

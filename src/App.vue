@@ -9,7 +9,11 @@ let users = ref()
 
 fetch('https://dummyjson.com/users')
   .then((res) => res.json())
-  .then((res) => (users.value = res.users))
+  .then((res) => console.log(res.users))
+
+setTimeout(() => {
+  console.log(users.value)
+}, 100)
 
 let inMeal = ref([
   {
