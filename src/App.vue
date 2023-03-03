@@ -1,5 +1,7 @@
 <template>
-  <TableComponent :data-table="inMeal" />
+  <div class="m-5">
+    <TableComponent :data-table="inMeal" />
+  </div>
 </template>
 <script setup>
 import { ref } from 'vue'

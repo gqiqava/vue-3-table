@@ -21,17 +21,26 @@
         <span v-else>{{ conc }} </span>
       </td>
     </tr>
+    <tr class="mb-5">
+      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+        <NewObject :field="singleData" @add-event="addToArr"></NewObject>
+      </th>
+    </tr>
   </table>
-  <button class="btn btn-success fw-bold ms-5" @click="generateCSV()">Download XLSX</button>
+  <button class="btn btn-primary fw-bold" @click="userTable.push(newObj)">Add data</button>
+
+  <button class="btn btn-success float-end fw-bold" @click="generateCSV()">Download XLSX</button>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 import InputComponent from './InputComponent.vue'
+import NewObject from './NewObject.vue'
 
 let csvString = ref()
 
 let inputArr = ref([])
+let newObj = ref({})
 
 const props = defineProps({
   dataTable: Array
@@ -54,20 +63,17 @@ const filterArr = (val) => {
   }
 }
 
-// watch(
-//   inputArr,
-//   () => {
-//     userTable.value = compTable.value.filter(
-//       (e) =>
-//         e.name.includes(name.value) &&
-//         e.number.includes(number.value) &&
-//         e.order.includes(order.value) &&
-//         e.price.toString().includes(price.value) &&
-//         e.time.includes(time.value)
-//     )
-//   },
-//   { deep: true }
-// )
+const addToArr = (val) => {
+  newObj.value[val.field] = val.userInput
+}
+
+watch(
+  newObj,
+  () => {
+    console.log(newObj)
+  },
+  { deep: true }
+)
 
 // Sorts
 
