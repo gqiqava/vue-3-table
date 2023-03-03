@@ -11,10 +11,6 @@ fetch('https://dummyjson.com/posts')
   .then((res) => res.json())
   .then((res) => (users.value = res.posts))
 
-setTimeout(() => {
-  console.log(users.value)
-}, 100)
-
 let inMeal = ref([
   {
     name: 'გიორგი',

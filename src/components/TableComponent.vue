@@ -12,16 +12,6 @@
       <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
         <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
       </th>
-
-      <!-- <th>
-        <input
-          type="text"
-          class="form-control"
-          v-model="time"
-          placeholder="დრო"
-          style="border: none"
-        />
-      </th> -->
     </tr>
     <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
       <td class="" v-for="conc in item">
@@ -54,29 +44,30 @@ let tableHeaders = Object.keys(userTable.value[0])
 const filterArr = (val) => {
   console.log(val.userInput)
   console.log(val.field)
-  userTable.value = compTable.value.filter(
-    (e) => e[val.field].includes(val.userInput)
-    // e.number.includes(number.value) &&
-    // e.order.includes(order.value) &&
-    // e.price.toString().includes(price.value) &&
-    // e.time.includes(time.value)
-  )
+
+  if (typeof userTable.value[0][val.field] !== 'string') {
+    userTable.value = compTable.value.filter((e) =>
+      JSON.stringify(e[val.field]).includes(val.userInput)
+    )
+  } else {
+    userTable.value = compTable.value.filter((e) => e[val.field].includes(val.userInput))
+  }
 }
 
-watch(
-  inputArr,
-  () => {
-    userTable.value = compTable.value.filter(
-      (e) =>
-        e.name.includes(name.value) &&
-        e.number.includes(number.value) &&
-        e.order.includes(order.value) &&
-        e.price.toString().includes(price.value) &&
-        e.time.includes(time.value)
-    )
-  },
-  { deep: true }
-)
+// watch(
+//   inputArr,
+//   () => {
+//     userTable.value = compTable.value.filter(
+//       (e) =>
+//         e.name.includes(name.value) &&
+//         e.number.includes(number.value) &&
+//         e.order.includes(order.value) &&
+//         e.price.toString().includes(price.value) &&
+//         e.time.includes(time.value)
+//     )
+//   },
+//   { deep: true }
+// )
 
 // Sorts
 
