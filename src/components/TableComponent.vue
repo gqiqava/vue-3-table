@@ -1,12 +1,6 @@
 <template>
   <table class="table table-bordered containe-fluid border" style="border-spacing: 2">
     <tr>
-      <!-- <th>
-        დრო
-        <button type="button" @click="sortDataByTime" class="btn btn-light ms-1 p-1 fw-bold">
-          ^
-        </button>
-      </th> -->
       <th v-for="(singleData, ind) in tableHeaders" :key="ind">
         {{ singleData }}
         <button type="button" @click="sortData(singleData)" class="btn btn-light ms-1 p-1 fw-bold">
@@ -15,52 +9,11 @@
       </th>
     </tr>
     <tr class="mb-5">
-      <th class="p-1">
-        <input
-          type="text"
-          class="form-control"
-          v-model="name"
-          placeholder="სახელი"
-          style="border: none"
-        />
+      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+        <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
       </th>
-      <th>
-        <input
-          type="text"
-          class="form-control"
-          v-model="number"
-          placeholder="ნომერი"
-          style="border: none"
-        />
-      </th>
-      <th>
-        <input
-          type="text"
-          class="form-control"
-          v-model="order"
-          placeholder="შეკვეთა"
-          style="border: none"
-        />
-      </th>
-      <th>
-        <input
-          type="text"
-          class="form-control"
-          v-model="price"
-          placeholder="ფასი"
-          style="border: none"
-        />
-      </th>
-      <th>
-        <input
-          type="text"
-          class="form-control"
-          v-model="details"
-          placeholder="დეტალები"
-          style="border: none"
-        />
-      </th>
-      <th>
+
+      <!-- <th>
         <input
           type="text"
           class="form-control"
@@ -68,7 +21,7 @@
           placeholder="დრო"
           style="border: none"
         />
-      </th>
+      </th> -->
     </tr>
     <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
       <td class="" v-for="conc in item">
@@ -84,17 +37,11 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import InputComponent from './InputComponent.vue'
 
 let csvString = ref()
 
-let name = ref('')
-let number = ref('')
-let order = ref('')
-let price = ref('')
-let details = ref('')
-let time = ref('')
-
-let inputArr = ref([name, number, order, price, details, time])
+let inputArr = ref([])
 
 const props = defineProps({
   dataTable: Array
@@ -103,6 +50,18 @@ const props = defineProps({
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
 let tableHeaders = Object.keys(userTable.value[0])
+
+const filterArr = (val) => {
+  console.log(val.userInput)
+  console.log(val.field)
+  userTable.value = compTable.value.filter(
+    (e) => e[val.field].includes(val.userInput)
+    // e.number.includes(number.value) &&
+    // e.order.includes(order.value) &&
+    // e.price.toString().includes(price.value) &&
+    // e.time.includes(time.value)
+  )
+}
 
 watch(
   inputArr,
