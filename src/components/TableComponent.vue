@@ -1,32 +1,7 @@
 <template>
-  <table class="table table-bordered container mt-5 border" style="border-spacing: 2">
+  <table class="table table-bordered containe-fluid border" style="border-spacing: 2">
     <tr>
       <!-- <th>
-        მომხმარებელი
-        <button type="button" @click="sortDataByName" class="btn btn-light ms-1 p-1 fw-bold">
-          ^
-        </button>
-      </th>
-      <th>
-        ნომერი
-        <button type="button" @click="sortDataByNumber" class="btn btn-light ms-1 p-1 fw-bold">
-          ^
-        </button>
-      </th>
-      <th>
-        შეკვეთა
-        <button type="button" @click="sortDataByOrder" class="btn btn-light ms-1 p-1 fw-bold">
-          ^
-        </button>
-      </th>
-      <th>
-        ფასი
-        <button type="button" @click="sortDataByPrice" class="btn btn-light ms-1 p-1 fw-bold">
-          ^
-        </button>
-      </th>
-      <th>დეტალები</th>
-      <th>
         დრო
         <button type="button" @click="sortDataByTime" class="btn btn-light ms-1 p-1 fw-bold">
           ^
@@ -34,7 +9,7 @@
       </th> -->
       <th v-for="(singleData, ind) in tableHeaders" :key="ind">
         {{ singleData }}
-        <button type="button" @click="sortDataByName" class="btn btn-light ms-1 p-1 fw-bold">
+        <button type="button" @click="sortData(singleData)" class="btn btn-light ms-1 p-1 fw-bold">
           ^
         </button>
       </th>
@@ -96,7 +71,12 @@
       </th>
     </tr>
     <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
-      <td class="" v-for="conc in item">{{ conc }}</td>
+      <td class="" v-for="conc in item">
+        <span v-if="typeof conc === 'object'">{{
+          JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+        }}</span>
+        <span v-else>{{ conc }} </span>
+      </td>
     </tr>
   </table>
   <button class="btn btn-success fw-bold ms-5" @click="generateCSV()">Download XLSX</button>
@@ -141,24 +121,9 @@ watch(
 
 // Sorts
 
-const sortDataByName = () => {
-  userTable.value.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
-}
-
-const sortDataByTime = () => {
-  userTable.value.sort((a, b) => (a.time > b.time ? 1 : b.time > a.time ? -1 : 0))
-}
-
-const sortDataByOrder = () => {
-  userTable.value.sort((a, b) => (a.order > b.order ? 1 : b.order > a.order ? -1 : 0))
-}
-
-const sortDataByPrice = () => {
-  userTable.value.sort((a, b) => a.price - b.price)
-}
-
-const sortDataByNumber = () => {
-  userTable.value.sort((a, b) => a.number - b.number)
+const sortData = (val) => {
+  // console.log(val)
+  userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
 }
 
 // Generate XLSX

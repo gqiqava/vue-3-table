@@ -7,9 +7,9 @@ import TableComponent from './components/TableComponent.vue'
 
 let users = ref()
 
-fetch('https://dummyjson.com/users')
+fetch('https://dummyjson.com/posts')
   .then((res) => res.json())
-  .then((res) => console.log(res.users))
+  .then((res) => (users.value = res.posts))
 
 setTimeout(() => {
   console.log(users.value)
