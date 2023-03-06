@@ -3,7 +3,12 @@
     <tr>
       <th v-for="(singleData, ind) in tableHeaders" :key="ind">
         {{ singleData }}
-        <button type="button" @click="sortData(singleData)" class="btn btn-light ms-1 p-1 fw-bold">
+        <button
+          type="button"
+          @click="sortData(singleData)"
+          class="btn btn-light ms-1 p-1 fw-bold"
+          v-if="typeof compTable[0][singleData] !== 'object'"
+        >
           ^
         </button>
         <div v-if="typeof compTable[0][singleData] === 'object'">
