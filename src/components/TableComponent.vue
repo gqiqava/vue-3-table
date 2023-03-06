@@ -1,15 +1,16 @@
 <template>
-  <table class="table table-bordered containe-fluid border" style="border-spacing: 2">
+  <table class="table table-striped table-bordered container-fluid border">
     <tr>
-      <th v-for="(singleData, ind) in tableHeaders" :key="ind">
+      <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="ps-2">
         {{ singleData }}
         <button
           type="button"
-          @click="sortData(singleData)"
-          class="btn btn-light ms-1 p-1 fw-bold"
+          @click="sortData(singleData, ind)"
+          class="btn btn-light p-1 fw-bold border-0"
           v-if="typeof compTable[0][singleData] !== 'object'"
         >
-          ^
+          <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 30px" />
+          <img v-else src="@/assets/filter.png" style="width: 30px" />
         </button>
         <div v-if="typeof compTable[0][singleData] === 'object'">
           <p v-for="dec in Object.entries(compTable[0][singleData])">
@@ -34,20 +35,26 @@
         </div> -->
       </th>
     </tr>
-    <tr class="mb-5">
-      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+    <tr>
+      <th
+        class="p-1 border-bottom border-dark-subtle"
+        v-for="(singleData, ind) in tableHeaders"
+        :key="ind"
+      >
         <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
       </th>
     </tr>
-    <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
-      <td class="" v-for="conc in item">
-        <span v-if="typeof conc === 'object'">{{
-          // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-          conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-        }}</span>
-        <span v-else>{{ conc }} </span>
-      </td>
-    </tr>
+    <tbody>
+      <tr v-for="(item, ind) in userTable" :key="ind">
+        <td class="" v-for="conc in item">
+          <span v-if="typeof conc === 'object'">{{
+            // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+            conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+          }}</span>
+          <span v-else>{{ conc }} </span>
+        </td>
+      </tr>
+    </tbody>
     <tr class="mb-5">
       <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
         <NewObject :field="singleData" @add-event="addToArr"></NewObject>
@@ -69,6 +76,7 @@ let csvString = ref()
 let inputArr = ref([])
 let newObj = ref({})
 let filteredCol = ref({})
+let filterActive = ref({})
 
 const props = defineProps({
   dataTable: Array
@@ -115,9 +123,11 @@ watch(
 
 // Sorts
 
-const sortData = (val) => {
-  // console.log(val)
-  userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
+const sortData = (val, val2) => {
+  if (filterActive.value !== val2) {
+    filterActive.value = val2
+    userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
+  }
 }
 
 // Generate XLSX
@@ -149,8 +159,12 @@ const generateCSV = () => {
 
 <style scoped>
 .activeFilter {
-  background-color: rgb(167, 216, 219);
+  background-color: #a7d8db;
   border-radius: 10px;
   padding: 5px;
+}
+
+.darker {
+  background-color: #f2f2f2;
 }
 </style>

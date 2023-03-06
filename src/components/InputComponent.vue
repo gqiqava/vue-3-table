@@ -3,7 +3,7 @@
     type="text"
     class="form-control"
     style="border: none"
-    :placeholder="field"
+    :placeholder="`filter ${field}`"
     v-model="userInput"
     @input="$emit('someEvent', { userInput, field })"
   />
