@@ -15,6 +15,18 @@
             >
           </p>
         </div>
+        <!-- Min Max Values? -->
+        <!-- <div v-if="parseFloat(compTable[0][singleData])">
+          <input
+            type="text"
+            class="form-control"
+            style="border: none"
+            placeholder="min"
+
+            @input="minMax(singleData)"
+          />
+          <input type="text" class="form-control" style="border: none" placeholder="max" />
+        </div> -->
       </th>
     </tr>
     <tr class="mb-5">
@@ -77,7 +89,8 @@ const filterArr = (val) => {
 const addToArr = (val) => {
   newObj.value[val.field] = val.userInput
 }
-const showParam = (val, val2) => {
+
+const showParam = (val) => {
   if (filteredCol.value === val) {
     filteredCol.value = null
   } else {
