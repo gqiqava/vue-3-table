@@ -6,6 +6,15 @@
         <button type="button" @click="sortData(singleData)" class="btn btn-light ms-1 p-1 fw-bold">
           ^
         </button>
+        <div v-if="typeof compTable[0][singleData] === 'object'">
+          <p v-for="dec in Object.entries(compTable[0][singleData])">
+            <span
+              @click="showParam(dec[0], singleData)"
+              :class="{ activeFilter: filteredCol === dec[0] }"
+              >{{ dec[0] }}</span
+            >
+          </p>
+        </div>
       </th>
     </tr>
     <tr class="mb-5">
@@ -16,7 +25,8 @@
     <tr v-for="(item, ind) in userTable" :key="ind" :class="{ darker: ind % 2 === 0 }">
       <td class="" v-for="conc in item">
         <span v-if="typeof conc === 'object'">{{
-          JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+          // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+          conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
         }}</span>
         <span v-else>{{ conc }} </span>
       </td>
@@ -41,6 +51,7 @@ let csvString = ref()
 
 let inputArr = ref([])
 let newObj = ref({})
+let filteredCol = ref({})
 
 const props = defineProps({
   dataTable: Array
@@ -48,7 +59,7 @@ const props = defineProps({
 
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
-let tableHeaders = Object.keys(userTable.value[0])
+let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
   console.log(val.userInput)
@@ -66,6 +77,15 @@ const filterArr = (val) => {
 const addToArr = (val) => {
   newObj.value[val.field] = val.userInput
 }
+const showParam = (val, val2) => {
+  if (filteredCol.value === val) {
+    filteredCol.value = null
+  } else {
+    filteredCol.value = val
+  }
+}
+
+// temp check
 
 watch(
   newObj,
@@ -109,4 +129,10 @@ const generateCSV = () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.activeFilter {
+  background-color: rgb(167, 216, 219);
+  border-radius: 10px;
+  padding: 5px;
+}
+</style>
