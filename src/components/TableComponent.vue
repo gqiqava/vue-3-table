@@ -1,8 +1,17 @@
 <template>
-  <span v-for="item in hideCol" :key="item" @click="hideCol.splice(hideCol.indexOf(item), 1)">
-    {{ item }},
-  </span>
   <table class="table table-striped table-bordered container-fluid border">
+    <caption style="caption-side: top" v-if="hideCol.length > 0">
+      <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
+      <span
+        v-for="item in hideCol"
+        :key="item"
+        @click="hideCol.splice(hideCol.indexOf(item), 1)"
+        class="hiddenCol"
+      >
+        {{ item }}
+      </span>
+      <small>Click on a desired pill to restore</small>
+    </caption>
     <colgroup>
       <col
         span="1"
@@ -14,9 +23,11 @@
         ]"
       />
     </colgroup>
-    <tr>
+    <tr class="shadow sticky-top bg-white">
       <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="ps-2">
-        <span @click="hideCol.push(singleData)">{{ singleData }}</span>
+        <span @click="hideCol.push(singleData)" style="text-transform: capitalize">{{
+          singleData
+        }}</span>
         <button
           type="button"
           @click="sortData(singleData, ind)"
@@ -27,13 +38,14 @@
           <img v-else src="@/assets/filter.png" style="width: 30px" />
         </button>
         <div v-if="typeof compTable[0][singleData] === 'object'">
-          <p v-for="dec in Object.entries(compTable[0][singleData])">
+          <span v-for="dec in Object.entries(compTable[0][singleData])">
             <span
               @click="showParam(dec[0], singleData)"
               :class="{ activeFilter: filteredCol === dec[0] }"
+              class="subCat"
               >{{ dec[0] }}</span
             >
-          </p>
+          </span>
         </div>
         <!-- Min Max Values? -->
         <!-- <div v-if="parseFloat(compTable[0][singleData])">
@@ -49,7 +61,7 @@
         </div> -->
       </th>
     </tr>
-    <tr>
+    <tr class="">
       <th
         class="p-1 border-bottom border-dark-subtle"
         v-for="(singleData, ind) in tableHeaders"
@@ -59,8 +71,14 @@
       </th>
     </tr>
     <tbody>
-      <tr v-for="(item, ind) in userTable" :key="ind">
-        <td class="" v-for="conc in item">
+      <tr
+        v-for="(item, ind) in userTable"
+        :key="ind"
+        :class="{ stickyRow: fixedRows.includes(ind) }"
+        :style="{ top: `${fixedRows.indexOf(ind) * 65 + 65}px` }"
+        @dblclick="addToFixed(ind)"
+      >
+        <td class="" v-for="(conc, i) in item" :key="i">
           <span v-if="typeof conc === 'object'">{{
             // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
             conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
@@ -92,6 +110,7 @@ let newObj = ref({})
 let filteredCol = ref({})
 let filterActive = ref({})
 let hideCol = ref([])
+let fixedRows = ref([])
 
 const props = defineProps({
   dataTable: Array
@@ -122,6 +141,14 @@ const addToArr = (val) => {
 //   console.log(val)
 //   delete thisIsObject[val]
 // }
+
+const addToFixed = (val) => {
+  if (fixedRows.value.includes(val)) {
+    fixedRows.value = fixedRows.value.filter((item) => item !== val)
+  } else {
+    fixedRows.value.push(val)
+  }
+}
 
 const showParam = (val) => {
   if (filteredCol.value === val) {
@@ -178,9 +205,30 @@ const generateCSV = () => {
 </script>
 
 <style scoped>
-.activeFilter {
-  background-color: #a7d8db;
-  border-radius: 10px;
+.hiddenCol {
+  background-color: #ffcccb;
+  border: 2px dashed #fc9796;
   padding: 5px;
+  border-radius: 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.subCat {
+  background-color: #acdadd;
+  padding: 5px 8px 5px 8px;
+  border-radius: 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.activeFilter {
+  background-color: #acdadd;
+  border: 2px dashed #238086;
+  padding: 3px 5px 3px 5px;
+  border-radius: 10px;
+}
+.stickyRow {
+  position: sticky;
+  box-shadow: 0 3px 3px -3px gray;
+  background-color: white;
 }
 </style>
