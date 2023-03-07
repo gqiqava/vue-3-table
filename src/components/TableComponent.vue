@@ -25,17 +25,19 @@
     </colgroup>
     <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
       <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
-        <span @click="hideCol.push(singleData)" style="text-transform: capitalize">{{
-          singleData
-        }}</span>
+        <span
+          @click="hideCol.push(singleData)"
+          style="text-transform: capitalize; cursor: pointer"
+          >{{ singleData }}</span
+        >
         <button
           type="button"
           @click="sortData(singleData, ind)"
           class="btn btn-light p-1 fw-bold border-0"
           v-if="typeof compTable[0][singleData] !== 'object'"
         >
-          <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 30px" />
-          <img v-else src="@/assets/filter.png" style="width: 30px" />
+          <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
+          <img v-else src="@/assets/filter.png" style="width: 22px" />
         </button>
         <div v-if="typeof compTable[0][singleData] === 'object'">
           <span v-for="dec in Object.entries(compTable[0][singleData])">
