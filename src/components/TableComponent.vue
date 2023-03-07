@@ -23,7 +23,7 @@
         ]"
       />
     </colgroup>
-    <tr class="shadow-sm sticky-top" style="background-color: #f0f8ff">
+    <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
       <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
         <span @click="hideCol.push(singleData)" style="text-transform: capitalize">{{
           singleData
@@ -228,6 +228,7 @@ const generateCSV = () => {
 } */
 .stickyRow {
   position: sticky;
-  box-shadow: inset 0 2px 0 #000000, inset 0 -2px 0 #000000;
+  box-shadow: inset 0em -0.1em #bcdaff;
+  background: #d8eaff;
 }
 </style>
