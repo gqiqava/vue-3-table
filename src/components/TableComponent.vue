@@ -1,8 +1,22 @@
 <template>
+  <span v-for="item in hideCol" :key="item" @click="hideCol.splice(hideCol.indexOf(item), 1)">
+    {{ item }}
+  </span>
   <table class="table table-striped table-bordered container-fluid border">
+    <colgroup>
+      <col
+        span="1"
+        v-for="(singleData, ind) in tableHeaders"
+        :key="ind"
+        class="ps-2"
+        :style="[
+          hideCol.includes(singleData) ? { visibility: 'collapse' } : { visibility: 'visible' }
+        ]"
+      />
+    </colgroup>
     <tr>
       <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="ps-2">
-        {{ singleData }}
+        <span @click="hideCol.push(singleData)">{{ singleData }}</span>
         <button
           type="button"
           @click="sortData(singleData, ind)"
@@ -77,6 +91,7 @@ let inputArr = ref([])
 let newObj = ref({})
 let filteredCol = ref({})
 let filterActive = ref({})
+let hideCol = ref([])
 
 const props = defineProps({
   dataTable: Array
@@ -102,6 +117,11 @@ const filterArr = (val) => {
 const addToArr = (val) => {
   newObj.value[val.field] = val.userInput
 }
+
+// const hideCol = (val) => {
+//   console.log(val)
+//   delete thisIsObject[val]
+// }
 
 const showParam = (val) => {
   if (filteredCol.value === val) {
@@ -162,9 +182,5 @@ const generateCSV = () => {
   background-color: #a7d8db;
   border-radius: 10px;
   padding: 5px;
-}
-
-.darker {
-  background-color: #f2f2f2;
 }
 </style>
