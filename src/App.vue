@@ -48,6 +48,50 @@ let inMeal = ref([
     id: '3'
   },
   {
+    name: 'ბექა',
+    order: 'ქათმის ატრია',
+    price: 26,
+    category: { name: 'ატრია', id: 1 },
+    details: { sauce: 'ტკბილ-მჟავე', double_meat: true },
+    number: '599565586',
+    time: '20:15',
+    comment: 'სტაფილოს გარეშე რაა',
+    id: '366'
+  },
+  {
+    name: 'ბექა',
+    order: 'ქათმის ატრია',
+    price: 26,
+    category: { name: 'ატრია', id: 1 },
+    details: { sauce: 'ტკბილ-მჟავე', double_meat: true },
+    number: '599565586',
+    time: '20:15',
+    comment: 'სტაფილოს გარეშე რაა',
+    id: '312'
+  },
+  {
+    name: 'ბექა',
+    order: 'ქათმის ატრია',
+    price: 26,
+    category: { name: 'ატრია', id: 1 },
+    details: { sauce: 'ტკბილ-მჟავე', double_meat: true },
+    number: '599565586',
+    time: '20:15',
+    comment: 'სტაფილოს გარეშე რაა',
+    id: '123'
+  },
+  {
+    name: 'ბექა',
+    order: 'ქათმის ატრია',
+    price: 26,
+    category: { name: 'ატრია', id: 1 },
+    details: { sauce: 'ტკბილ-მჟავე', double_meat: true },
+    number: '599565586',
+    time: '20:15',
+    comment: 'სტაფილოს გარეშე რაა',
+    id: '369'
+  },
+  {
     name: 'ლაზარე',
     order: 'სქონლის ატრია',
     price: 32,

@@ -23,8 +23,8 @@
         ]"
       />
     </colgroup>
-    <tr class="shadow sticky-top bg-white">
-      <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="ps-2">
+    <tr class="shadow-sm sticky-top" style="background-color: #f0f8ff">
+      <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
         <span @click="hideCol.push(singleData)" style="text-transform: capitalize">{{
           singleData
         }}</span>
@@ -62,11 +62,7 @@
       </th>
     </tr>
     <tr class="">
-      <th
-        class="p-1 border-bottom border-dark-subtle"
-        v-for="(singleData, ind) in tableHeaders"
-        :key="ind"
-      >
+      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
         <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
       </th>
     </tr>
@@ -75,7 +71,7 @@
         v-for="(item, ind) in userTable"
         :key="ind"
         :class="{ stickyRow: fixedRows.includes(ind) }"
-        :style="{ top: `${fixedRows.indexOf(ind) * 65 + 65}px` }"
+        :style="{ top: `${fixedRows.indexOf(ind) * 65 + 80}px` }"
         @dblclick="addToFixed(ind)"
       >
         <td class="" v-for="(conc, i) in item" :key="i">
@@ -226,9 +222,12 @@ const generateCSV = () => {
   padding: 3px 5px 3px 5px;
   border-radius: 10px;
 }
+/* .table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f0f8ff;
+} */
 .stickyRow {
   position: sticky;
-  box-shadow: 0 3px 3px -3px gray;
-  background-color: white;
+  box-shadow: inset 0 2px 0 #000000, inset 0 -2px 0 #000000;
 }
 </style>
