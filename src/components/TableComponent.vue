@@ -1,6 +1,6 @@
 <template>
   <span v-for="item in hideCol" :key="item" @click="hideCol.splice(hideCol.indexOf(item), 1)">
-    {{ item }}
+    {{ item }},
   </span>
   <table class="table table-striped table-bordered container-fluid border">
     <colgroup>
