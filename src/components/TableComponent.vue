@@ -65,7 +65,7 @@
           :style="{ top: `${fixedRows.indexOf(ind) * 65 + 80}px` }"
           @dblclick="addToFixed(ind)"
         >
-          <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 130px">
+          <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
             <span v-if="typeof conc === 'object'">{{
               // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
               conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
