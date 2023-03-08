@@ -1,5 +1,5 @@
 <template>
-  <div class="table-responsive">
+  <div class="tableResp">
     <table class="table table-striped table-bordered container-fluid border">
       <caption style="caption-side: top" v-if="hideCol.length > 0">
         <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
@@ -52,7 +52,7 @@
           </div>
         </th>
       </tr>
-      <tr class="">
+      <tr>
         <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
           <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
         </th>
@@ -81,6 +81,7 @@
       </tr>
     </table>
   </div>
+
   <button class="btn btn-primary fw-bold" @click="userTable.push(newObj)">Add data</button>
 
   <button class="btn btn-success float-end fw-bold" @click="generateCSV()">Download XLSX</button>
@@ -192,6 +193,10 @@ const generateCSV = () => {
 </script>
 
 <style scoped>
+.tableResp {
+  overflow: scroll;
+  height: 100vh;
+}
 .hiddenCol {
   background-color: #ffcccb;
   border: 2px dashed #fc9796;
