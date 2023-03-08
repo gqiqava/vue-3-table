@@ -1,96 +1,86 @@
 <template>
-  <table class="table table-striped table-bordered container-fluid border">
-    <caption style="caption-side: top" v-if="hideCol.length > 0">
-      <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
-      <span
-        v-for="item in hideCol"
-        :key="item"
-        @click="hideCol.splice(hideCol.indexOf(item), 1)"
-        class="hiddenCol"
-      >
-        {{ item }}
-      </span>
-      <small>Click on a desired pill to restore</small>
-    </caption>
-    <colgroup>
-      <col
-        span="1"
-        v-for="(singleData, ind) in tableHeaders"
-        :key="ind"
-        class="ps-2"
-        :style="[
-          hideCol.includes(singleData) ? { visibility: 'collapse' } : { visibility: 'visible' }
-        ]"
-      />
-    </colgroup>
-    <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
-      <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered container-fluid border">
+      <caption style="caption-side: top" v-if="hideCol.length > 0">
+        <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
         <span
-          @click="hideCol.push(singleData)"
-          style="text-transform: capitalize; cursor: pointer"
-          >{{ singleData }}</span
+          v-for="item in hideCol"
+          :key="item"
+          @click="hideCol.splice(hideCol.indexOf(item), 1)"
+          class="hiddenCol"
         >
-        <button
-          type="button"
-          @click="sortData(singleData, ind)"
-          class="btn btn-light p-1 fw-bold border-0"
-          v-if="typeof compTable[0][singleData] !== 'object'"
-        >
-          <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
-          <img v-else src="@/assets/filter.png" style="width: 22px" />
-        </button>
-        <div v-if="typeof compTable[0][singleData] === 'object'">
-          <span v-for="dec in Object.entries(compTable[0][singleData])">
-            <span
-              @click="showParam(dec[0], singleData)"
-              :class="{ activeFilter: filteredCol === dec[0] }"
-              class="subCat"
-              >{{ dec[0] }}</span
-            >
-          </span>
-        </div>
-        <!-- Min Max Values? -->
-        <!-- <div v-if="parseFloat(compTable[0][singleData])">
-          <input
-            type="text"
-            class="form-control"
-            style="border: none"
-            placeholder="min"
-
-            @input="minMax(singleData)"
-          />
-          <input type="text" class="form-control" style="border: none" placeholder="max" />
-        </div> -->
-      </th>
-    </tr>
-    <tr class="">
-      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
-        <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
-      </th>
-    </tr>
-    <tbody>
-      <tr
-        v-for="(item, ind) in userTable"
-        :key="ind"
-        :class="{ stickyRow: fixedRows.includes(ind) }"
-        :style="{ top: `${fixedRows.indexOf(ind) * 65 + 80}px` }"
-        @dblclick="addToFixed(ind)"
-      >
-        <td class="" v-for="(conc, i) in item" :key="i">
-          <span v-if="typeof conc === 'object'">{{
-            // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-            conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-          }}</span>
-          <span v-else>{{ conc }} </span>
-        </td>
+          {{ item }}
+        </span>
+        <small>Click on a desired pill to restore</small>
+      </caption>
+      <colgroup>
+        <col
+          span="1"
+          v-for="(singleData, ind) in tableHeaders"
+          :key="ind"
+          class="ps-2"
+          :style="[
+            hideCol.includes(singleData) ? { visibility: 'collapse' } : { visibility: 'visible' }
+          ]"
+        />
+      </colgroup>
+      <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
+        <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
+          <span
+            @click="hideCol.push(singleData)"
+            style="text-transform: capitalize; cursor: pointer"
+            >{{ singleData }}</span
+          >
+          <button
+            type="button"
+            @click="sortData(singleData, ind)"
+            class="btn btn-light p-1 fw-bold border-0"
+            v-if="typeof compTable[0][singleData] !== 'object'"
+          >
+            <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
+            <img v-else src="@/assets/filter.png" style="width: 22px" />
+          </button>
+          <div v-if="typeof compTable[0][singleData] === 'object'">
+            <span v-for="dec in Object.entries(compTable[0][singleData])">
+              <span
+                @click="showParam(dec[0], singleData)"
+                :class="{ activeFilter: filteredCol === dec[0] }"
+                class="subCat"
+                >{{ dec[0] }}</span
+              >
+            </span>
+          </div>
+        </th>
       </tr>
-    </tbody>
-    <tr class="mb-5">
-      <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
-        <NewObject :field="singleData" @add-event="addToArr"></NewObject>
-      </th>
-    </tr>
-  </table>
+      <tr class="">
+        <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+          <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
+        </th>
+      </tr>
+      <tbody>
+        <tr
+          v-for="(item, ind) in userTable"
+          :key="ind"
+          :class="{ stickyRow: fixedRows.includes(ind) }"
+          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 80}px` }"
+          @dblclick="addToFixed(ind)"
+        >
+          <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 130px">
+            <span v-if="typeof conc === 'object'">{{
+              // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+              conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+            }}</span>
+            <span v-else>{{ conc }} </span>
+          </td>
+        </tr>
+      </tbody>
+      <tr class="mb-5">
+        <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+          <NewObject :field="singleData" @add-event="addToArr"></NewObject>
+        </th>
+      </tr>
+    </table>
+  </div>
   <button class="btn btn-primary fw-bold" @click="userTable.push(newObj)">Add data</button>
 
   <button class="btn btn-success float-end fw-bold" @click="generateCSV()">Download XLSX</button>
@@ -119,15 +109,14 @@ let userTable = ref(props.dataTable)
 let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
-  console.log(val.userInput)
-  console.log(val.field)
-
   if (typeof userTable.value[0][val.field] !== 'string') {
     userTable.value = compTable.value.filter((e) =>
       JSON.stringify(e[val.field]).includes(val.userInput)
     )
   } else {
-    userTable.value = compTable.value.filter((e) => e[val.field].includes(val.userInput))
+    userTable.value = compTable.value.filter((e) =>
+      e[val.field].toLowerCase().includes(val.userInput.toLowerCase())
+    )
   }
 }
 

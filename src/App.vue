@@ -1,6 +1,6 @@
 <template>
   <div class="m-5">
-    <TableComponent :data-table="inMeal" />
+    <TableComponent :data-table="users" />
   </div>
 </template>
 <script setup>
@@ -9,9 +9,9 @@ import TableComponent from './components/TableComponent.vue'
 
 let users = ref()
 
-fetch('https://dummyjson.com/posts')
+fetch('https://dummyjson.com/products')
   .then((res) => res.json())
-  .then((res) => (users.value = res.posts))
+  .then((res) => (users.value = res.products))
 
 let inMeal = ref([
   {
