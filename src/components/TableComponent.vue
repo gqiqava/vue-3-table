@@ -194,7 +194,7 @@ const generateCSV = () => {
 
 <style scoped>
 .tableResp {
-  overflow: scroll;
+  overflow: auto;
   height: 100vh;
 }
 .hiddenCol {
@@ -218,13 +218,9 @@ const generateCSV = () => {
   padding: 3px 5px 3px 5px;
   border-radius: 10px;
 }
-/* .table-striped > tbody > tr:nth-child(odd) > td,
-.table-striped > tbody > tr:nth-child(odd) > th {
-  background-color: #f0f8ff;
-} */
 .stickyRow {
   position: sticky;
-  box-shadow: inset 0em -0.1em #bcdaff;
-  background: #d8eaff;
+  box-shadow: inset 0em -0.15em #acdadd;
+  background: #ffffff;
 }
 </style>

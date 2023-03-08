@@ -1,6 +1,6 @@
 <template>
   <div class="m-5">
-    <TableComponent :data-table="users" />
+    <TableComponent :data-table="inMeal" />
   </div>
 </template>
 <script setup>
