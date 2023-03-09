@@ -41,7 +41,7 @@
             <img v-else src="@/assets/filter.png" style="width: 22px" />
           </button>
           <InputComponent
-            v-if="recNumbers.includes(singleData)"
+            v-if="recNumbers?.includes(singleData)"
             :field="singleData"
             :in-case="2"
             @filter-min="filterMinAr"
@@ -68,7 +68,7 @@
           v-for="(item, ind) in userTable"
           :key="ind"
           :class="{ stickyRow: fixedRows.includes(ind) }"
-          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 80}px` }"
+          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 101}px` }"
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
@@ -95,6 +95,7 @@
 
 <script setup>
 import { getConstantType } from '@vue/compiler-core'
+import { objectToString } from '@vue/shared'
 import { ref, watch } from 'vue'
 import InputComponent from './InputComponent.vue'
 import NewObject from './NewObject.vue'
@@ -190,11 +191,13 @@ const sortData = (val, val2) => {
 const generateCSV = () => {
   csvString.value = [
     Object.keys(userTable.value[0]),
-    ...userTable.value.map((item) => [
-      typeof Object.values(item) === 'object'
-        ? JSON.stringify(item).replace(/[\{\}"]+/g, ' ')
-        : Object.values(item)
-    ])
+    ...userTable.value.map((item) =>
+      Object.values(item).map((e) =>
+        typeof e === 'object'
+          ? JSON.stringify(e).replace(/[\{\}\,"]+/g, ' ')
+          : JSON.stringify(e).replace(',', ' ')
+      )
+    )
   ]
     .map((e) => e.join(','))
     .join('\n')
