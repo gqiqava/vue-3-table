@@ -13,7 +13,7 @@
       type="text"
       class="form-control col"
       style="border: none; border-radius: 0px"
-      placeholder="Minimum"
+      placeholder="from"
       v-model="minVal"
       @input="$emit('filterMin', { minVal, maxVal, field })"
     />
@@ -21,7 +21,7 @@
       type="text"
       class="form-control col"
       style="border: none; border-radius: 0px"
-      placeholder="Maximum"
+      placeholder="to"
       v-model="maxVal"
       @input="$emit('filterMin', { minVal, maxVal, field })"
     />

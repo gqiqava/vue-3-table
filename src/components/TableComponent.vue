@@ -163,14 +163,20 @@ const showParam = (val) => {
 
 const filterMinAr = (val) => {
   console.log(val.minVal, val)
-  let tempMax = Infinity
-  let tempMin = -Infinity
+  // let tempMax = 1000
+  // let tempMin = 0
 
-  if (val.maxVal !== undefined) {
-  }
+  // if (val.maxVal !== undefined) {
+  //   tempMax = val.maxVal
+  // }
+  // if (val.minVal !== undefined) {
+  //   tempMin = val.maxVal
+  // }
 
   userTable.value = compTable.value.filter(
-    (e) => parseFloat(e[val.field]) >= val.minVal && parseFloat(e[val.field]) <= 50
+    (e) =>
+      parseFloat(e[val.field]) >= (val.minVal ? val.minVal : -Infinity) &&
+      parseFloat(e[val.field]) <= (val.maxVal ? val.maxVal : Infinity)
   )
 }
 
