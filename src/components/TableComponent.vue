@@ -40,6 +40,12 @@
             <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
             <img v-else src="@/assets/filter.png" style="width: 22px" />
           </button>
+          <InputComponent
+            v-if="recNumbers.includes(singleData)"
+            :field="singleData"
+            :in-case="2"
+            @filter-min="filterMinAr"
+          ></InputComponent>
           <div v-if="typeof compTable[0][singleData] === 'object'">
             <span v-for="dec in Object.entries(compTable[0][singleData])">
               <span
@@ -54,7 +60,7 @@
       </tr>
       <tr>
         <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
-          <InputComponent :field="singleData" @some-event="filterArr"></InputComponent>
+          <InputComponent :field="singleData" :in-case="1" @some-event="filterArr"></InputComponent>
         </th>
       </tr>
       <tbody>
@@ -88,6 +94,7 @@
 </template>
 
 <script setup>
+import { getConstantType } from '@vue/compiler-core'
 import { ref, watch } from 'vue'
 import InputComponent from './InputComponent.vue'
 import NewObject from './NewObject.vue'
@@ -102,14 +109,22 @@ let hideCol = ref([])
 let fixedRows = ref([])
 
 const props = defineProps({
-  dataTable: Array
+  dataTable: {
+    type: Array,
+    required: true
+  },
+  numbers: {
+    type: Array
+  }
 })
 
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
+let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
+  console.log(val)
   if (typeof userTable.value[0][val.field] !== 'string') {
     userTable.value = compTable.value.filter((e) =>
       JSON.stringify(e[val.field]).includes(val.userInput)
@@ -146,6 +161,19 @@ const showParam = (val) => {
   }
 }
 
+const filterMinAr = (val) => {
+  console.log(val.minVal, val)
+  let tempMax = Infinity
+  let tempMin = -Infinity
+
+  if (val.maxVal !== undefined) {
+  }
+
+  userTable.value = compTable.value.filter(
+    (e) => parseFloat(e[val.field]) >= val.minVal && parseFloat(e[val.field]) <= 50
+  )
+}
+
 // temp check
 
 watch(
@@ -160,25 +188,26 @@ watch(
 
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
+    console.log(val)
+
     filterActive.value = val2
-    userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
+    if (recNumbers.value.includes(val)) {
+      userTable.value.sort((a, b) => a[val] - b[val])
+    } else {
+      userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
+    }
   }
 }
 
 // Generate XLSX
-
 const generateCSV = () => {
+  console.log(Object.keys(userTable.value[0]))
   csvString.value = [
-    ['Name', 'Number', 'Time', 'Order', 'Price', 'Category', 'Sauce', 'Double meat'],
+    Object.keys(userTable.value[0]),
     ...userTable.value.map((item) => [
-      item.name,
-      item.number,
-      item.time,
-      item.order,
-      item.price,
-      item.category.name,
-      item.details.sauce,
-      item.details.double_meat
+      typeof Object.values(item) === 'object'
+        ? JSON.stringify(item).replace(/[\{\}"]+/g, ' ')
+        : Object.values(item)
     ])
   ]
     .map((e) => e.join(','))

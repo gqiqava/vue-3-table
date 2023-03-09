@@ -1,5 +1,6 @@
 <template>
   <input
+    v-if="inCase === 1"
     type="text"
     class="form-control"
     style="border: none"
@@ -7,16 +8,39 @@
     v-model="userInput"
     @input="$emit('someEvent', { userInput, field })"
   />
+  <div class="row" v-else>
+    <input
+      type="text"
+      class="form-control col"
+      style="border: none; border-radius: 0px"
+      placeholder="Minimum"
+      v-model="minVal"
+      @input="$emit('filterMin', { minVal, maxVal, field })"
+    />
+    <input
+      type="text"
+      class="form-control col"
+      style="border: none; border-radius: 0px"
+      placeholder="Maximum"
+      v-model="maxVal"
+      @input="$emit('filterMin', { minVal, maxVal, field })"
+    />
+  </div>
 </template>
 
 <script setup>
 import { ref, watch } from 'vue'
 
 let userInput = ref('')
+let minVal = ref()
+let maxVal = ref()
+
 let field = ref(props.field)
+const inCase = ref(props.inCase)
 
 const props = defineProps({
-  field: String
+  field: String,
+  inCase: Number
 })
 
 // watch(userInput, () => {
