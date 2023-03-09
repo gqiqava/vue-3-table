@@ -1,6 +1,6 @@
 <template>
   <div class="m-5">
-    <TableComponent :data-table="inMeal" />
+    <TableComponent :data-table="inMeal" :numbers="['price', 'id']" />
   </div>
 </template>
 <script setup>
