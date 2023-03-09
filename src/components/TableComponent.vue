@@ -124,7 +124,6 @@ let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
-  console.log(val)
   if (typeof userTable.value[0][val.field] !== 'string') {
     userTable.value = compTable.value.filter((e) =>
       JSON.stringify(e[val.field]).includes(val.userInput)
@@ -174,22 +173,10 @@ const filterMinAr = (val) => {
   )
 }
 
-// temp check
-
-watch(
-  newObj,
-  () => {
-    console.log(newObj)
-  },
-  { deep: true }
-)
-
 // Sorts
 
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
-    console.log(val)
-
     filterActive.value = val2
     if (recNumbers.value.includes(val)) {
       userTable.value.sort((a, b) => a[val] - b[val])
@@ -201,7 +188,6 @@ const sortData = (val, val2) => {
 
 // Generate XLSX
 const generateCSV = () => {
-  console.log(Object.keys(userTable.value[0]))
   csvString.value = [
     Object.keys(userTable.value[0]),
     ...userTable.value.map((item) => [
