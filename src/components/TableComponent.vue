@@ -123,11 +123,13 @@ let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
-  inputArr.value[val.field] = val.userInput
-  console.log(inputArr.value)
+  // inputArr.value[val.field] = val.userInput
 
-  // if (inputArr.value.find(e => e.Name === 'Magenic')){
-
+  // for (const item in inputArr.value) {
+  //   console.log(item, inputArr.value[item])
+  //   userTable.value = compTable.value.filter((e) =>
+  //     e[item].toLowerCase().includes(inputArr.value[item].toLowerCase())
+  //   )
   // }
 
   if (typeof userTable.value[0][val.field] !== 'string') {
