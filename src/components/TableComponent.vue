@@ -94,15 +94,13 @@
 </template>
 
 <script setup>
-import { getConstantType } from '@vue/compiler-core'
-import { objectToString } from '@vue/shared'
 import { ref, watch } from 'vue'
 import InputComponent from './InputComponent.vue'
 import NewObject from './NewObject.vue'
 
 let csvString = ref()
 
-let inputArr = ref([])
+let inputArr = ref({})
 let newObj = ref({})
 let filteredCol = ref({})
 let filterActive = ref({})
@@ -125,6 +123,13 @@ let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
 const filterArr = (val) => {
+  inputArr.value[val.field] = val.userInput
+  console.log(inputArr.value)
+
+  // if (inputArr.value.find(e => e.Name === 'Magenic')){
+
+  // }
+
   if (typeof userTable.value[0][val.field] !== 'string') {
     userTable.value = compTable.value.filter((e) =>
       JSON.stringify(e[val.field]).includes(val.userInput)
