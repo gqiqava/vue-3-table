@@ -103,7 +103,7 @@ let csvString = ref()
 let inputArr = ref({})
 let newObj = ref({})
 let filteredCol = ref({})
-let filterActive = ref({})
+let filterActive = ref()
 let hideCol = ref([])
 let fixedRows = ref([])
 
@@ -116,6 +116,8 @@ const props = defineProps({
     type: Array
   }
 })
+
+const origin = [...props.dataTable]
 
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
@@ -192,11 +194,15 @@ const filterMinAr = (val) => {
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
     filterActive.value = val2
+    console.log(1)
     if (recNumbers.value.includes(val)) {
       userTable.value.sort((a, b) => a[val] - b[val])
     } else {
       userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
     }
+  } else {
+    filterActive.value = null
+    userTable.value = origin
   }
 }
 
