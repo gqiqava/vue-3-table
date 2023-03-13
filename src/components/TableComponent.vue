@@ -29,8 +29,8 @@
           <span
             @click="hideCol.push(singleData)"
             style="text-transform: capitalize; cursor: pointer"
-            >{{ singleData }}</span
-          >
+            >{{ singleData.slice(0, 14) }}<span v-if="singleData.length > 14">..</span>
+          </span>
           <button
             type="button"
             @click="sortData(singleData, ind)"
@@ -40,6 +40,14 @@
             <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
             <img v-else src="@/assets/filter.png" style="width: 22px" />
           </button>
+        </th>
+      </tr>
+      <tr
+        class="shadow-sm sticky-top mt-5"
+        :style="{ top: `50px` }"
+        style="background-color: #f5fbff"
+      >
+        <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
           <InputComponent
             v-if="recNumbers?.includes(singleData)"
             :field="singleData"
@@ -68,7 +76,7 @@
           v-for="(item, ind) in userTable"
           :key="ind"
           :class="{ stickyRow: fixedRows.includes(ind) }"
-          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 101}px` }"
+          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 115}px` }"
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
@@ -172,16 +180,6 @@ const showParam = (val) => {
 
 const filterMinAr = (val) => {
   console.log(val.minVal, val)
-  // let tempMax = 1000
-  // let tempMin = 0
-
-  // if (val.maxVal !== undefined) {
-  //   tempMax = val.maxVal
-  // }
-  // if (val.minVal !== undefined) {
-  //   tempMin = val.maxVal
-  // }
-
   userTable.value = compTable.value.filter(
     (e) =>
       parseFloat(e[val.field]) >= (val.minVal ? val.minVal : -Infinity) &&
