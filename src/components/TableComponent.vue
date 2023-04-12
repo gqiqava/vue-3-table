@@ -89,8 +89,7 @@
         >
           <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
             <span v-if="typeof conc === 'object'">{{
-              // conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-              1
+              conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
             }}</span>
             <span v-else>{{ conc }} </span>
           </td>

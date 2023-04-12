@@ -1,6 +1,6 @@
 <template>
   <div class="m-5">
-    <TableComponent :data-table="users" :numbers="['id', 'phone']" />
+    <TableComponent :data-table="users" :numbers="['id']" />
   </div>
 </template>
 <script setup>
@@ -9,11 +9,55 @@ import TableComponent from './components/TableComponent.vue'
 
 let users = ref()
 
-fetch('https://manager.scc.az/admin/userLastLoginTimes?token=t_KM9McZIvtAAO0InN7MpV9hhJkZOQqz')
-  .then((res) => res.json())
-  .then((res) => {
-    users.value = res.userList.slice(0, 500)
+// fetch('https://manager.scc.az/admin/userLastLoginTimes?token=t_KM9McZIvtAAO0InN7MpV9hhJkZOQqz')
+//   .then((res) => res.json())
+//   .then((res) => {
+//     users.value = res.userList.slice(0, 500)
+//   })
+
+const fetchCHeck = () => {
+  fetch('https://roomswaregraphql.zuniac.com/graphql', {
+    method: 'POST',
+
+    headers: {
+      'Content-Type': 'application/json'
+    },
+
+    body: JSON.stringify({
+      query: `{
+        apartments {
+          id
+          status {
+            name
+          }
+          building {
+            id
+            status {
+              name
+            }
+            state {
+              name
+            }
+          }
+          profile {
+            id
+            properties {
+              name
+              value
+            }
+          }
+        }
+      }`
+    })
   })
+    .then((res) => res.json())
+    .then((res) => {
+      users.value = res.data.apartments
+      console.log(res.data.apartments)
+    })
+}
+
+fetchCHeck()
 
 let inMeal = ref([
   {
