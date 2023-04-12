@@ -37,8 +37,10 @@
             class="btn btn-light p-1 fw-bold border-0"
             v-if="typeof compTable[0][singleData] !== 'object'"
           >
-            <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 22px" />
-            <img v-else src="@/assets/filter.png" style="width: 22px" />
+            <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 20px" />
+            <img v-else src="@/assets/filter.png" style="width: 20px" />
+            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-user"></i>
           </button>
         </th>
       </tr>
@@ -54,7 +56,13 @@
             :in-case="2"
             @filter-min="filterMinAr"
           ></InputComponent>
-          <div v-if="typeof compTable[0][singleData] === 'object'">
+          <div
+            v-if="
+              typeof compTable[0][singleData] === 'object' &&
+              compTable[0][singleData] !== null &&
+              compTable[0][singleData] !== undefined
+            "
+          >
             <span v-for="dec in Object.entries(compTable[0][singleData])">
               <span
                 @click="showParam(dec[0], singleData)"
@@ -81,8 +89,8 @@
         >
           <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
             <span v-if="typeof conc === 'object'">{{
-              // JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-              conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+              // conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
+              1
             }}</span>
             <span v-else>{{ conc }} </span>
           </td>
@@ -192,7 +200,7 @@ const filterMinAr = (val) => {
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
     filterActive.value = val2
-    console.log(1)
+    console.log(val, val2)
     if (recNumbers.value.includes(val)) {
       userTable.value.sort((a, b) => a[val] - b[val])
     } else {

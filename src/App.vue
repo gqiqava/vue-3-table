@@ -1,6 +1,6 @@
 <template>
   <div class="m-5">
-    <TableComponent :data-table="users" :numbers="['price', 'rating']" />
+    <TableComponent :data-table="users" :numbers="['id', 'phone']" />
   </div>
 </template>
 <script setup>
@@ -9,9 +9,11 @@ import TableComponent from './components/TableComponent.vue'
 
 let users = ref()
 
-fetch('https://dummyjson.com/products')
+fetch('https://manager.scc.az/admin/userLastLoginTimes?token=t_KM9McZIvtAAO0InN7MpV9hhJkZOQqz')
   .then((res) => res.json())
-  .then((res) => (users.value = res.products))
+  .then((res) => {
+    users.value = res.userList.slice(0, 500)
+  })
 
 let inMeal = ref([
   {
