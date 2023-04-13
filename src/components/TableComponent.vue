@@ -63,46 +63,7 @@
               <img v-else src="@/assets/filter.png" style="width: 20px" />
             </span>
           </span>
-          <!-- <button
-            type="button"
-            @click="sortData(singleData, ind)"
-            class="btn btn-light p-1 fw-bold border-0"
-            v-if="typeof compTable[0][singleData] !== 'object'"
-          >
-            <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 20px" />
-            <img v-else src="@/assets/filter.png" style="width: 20px" />
-          </button> -->
         </th>
-      </tr>
-      <tr
-        class="shadow-sm sticky-top mt-5"
-        :style="{ top: `50px` }"
-        style="background-color: #f5fbff"
-      >
-        <!-- <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
-          <InputComponent
-            v-if="recNumbers?.includes(singleData)"
-            :field="singleData"
-            :in-case="2"
-            @filter-min="filterMinAr"
-          ></InputComponent>
-          <div
-            v-if="
-              typeof compTable[0][singleData] === 'object' &&
-              compTable[0][singleData] !== null &&
-              compTable[0][singleData] !== undefined
-            "
-          >
-            <span v-for="dec in Object.entries(compTable[0][singleData])">
-              <span
-                @click="showParam(dec[0], singleData)"
-                :class="{ activeFilter: filteredCol === dec[0] && filteredCol2 === singleData }"
-                class="subCat"
-                >{{ dec[0] }}
-              </span>
-            </span>
-          </div>
-        </th> -->
       </tr>
       <tr>
         <th
@@ -145,16 +106,8 @@ import { ref } from 'vue'
 import InputComponent from './InputComponent.vue'
 import NewObject from './NewObject.vue'
 
-let csvString = ref()
-
-let inputArr = ref({})
-let newObj = ref({})
-let filteredCol = ref({})
-let filteredCol2 = ref({})
-let filterActive = ref()
 let hideCol = ref([])
 let showSettings = ref([])
-let fixedRows = ref([])
 
 const props = defineProps({
   dataTable: {
@@ -177,43 +130,17 @@ let userTable = ref(props.dataTable)
 let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
-const filterCol = (from, ...selectors) =>
-  [...selectors].map((s) =>
-    s
-      .replace(/\[([^\[\]]*)\]/g, '.$1.')
-      .split('.')
-      .filter((t) => t !== '')
-      .reduce((prev, cur) => prev && prev[cur], from)
-  )
+// Add to array
 
-const filterArr = (val) => {
-  // inputArr.value[val.field] = val.userInput
-
-  // for (const item in inputArr.value) {
-  //   console.log(item, inputArr.value[item])
-  //   userTable.value = compTable.value.filter((e) =>
-  //     e[item].toLowerCase().includes(inputArr.value[item].toLowerCase())
-  //   )
-  // }
-
-  console.log(val.field)
-
-  if (typeof compTable.value[0][val.field] !== 'string') {
-    userTable.value = compTable.value.filter((e) => {
-      JSON.stringify(e[val.field]).includes(val.userInput)
-      console.log(JSON.stringify(e[val.field]).toLowerCase().includes(val.userInput.toLowerCase()))
-    })
-  } else {
-    userTable.value = compTable.value.filter((e) =>
-      e[val.field].toLowerCase().includes(val.userInput.toLowerCase())
-    )
-    console.log(1)
-  }
-}
+let newObj = ref({})
 
 const addToArr = (val) => {
   newObj.value[val.field] = val.userInput
 }
+
+// Fixed row
+
+let fixedRows = ref([])
 
 const addToFixed = (val) => {
   if (fixedRows.value.includes(val)) {
@@ -223,16 +150,7 @@ const addToFixed = (val) => {
   }
 }
 
-// const showParam = (val, val2) => {
-//   console.log(val, val2)
-//   if (filteredCol.value === val && filteredCol2.value === val2) {
-//     filteredCol.value = null
-//     filteredCol2.value = null
-//   } else {
-//     filteredCol.value = val
-//     filteredCol2.value = val2
-//   }
-// }
+// Range
 
 const filterMinAr = (val) => {
   console.log(val.minVal, val)
@@ -244,6 +162,8 @@ const filterMinAr = (val) => {
 }
 
 // Sorts
+
+let filterActive = ref()
 
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
@@ -260,6 +180,9 @@ const sortData = (val, val2) => {
 }
 
 // Generate XLSX
+
+let csvString = ref()
+
 const generateCSV = () => {
   csvString.value = [
     Object.keys(userTable.value[0]),
@@ -279,6 +202,31 @@ const generateCSV = () => {
   hiddenElement.target = '_blank'
   hiddenElement.download = 'data.csv'
   hiddenElement.click()
+}
+
+// FIlters
+
+const filterCol = (from, ...selectors) =>
+  [...selectors].map((s) =>
+    s
+      .replace(/\[([^\[\]]*)\]/g, '.$1.')
+      .split('.')
+      .filter((t) => t !== '')
+      .reduce((prev, cur) => prev && prev[cur], from)
+  )
+
+const filterArr = (val) => {
+  if (typeof compTable.value[0][val.field] !== 'string') {
+    userTable.value = compTable.value.filter((e) => {
+      JSON.stringify(e[val.field]).includes(val.userInput)
+      console.log(JSON.stringify(e[val.field]).toLowerCase().includes(val.userInput.toLowerCase()))
+    })
+  } else {
+    userTable.value = compTable.value.filter((e) =>
+      e[val.field].toLowerCase().includes(val.userInput.toLowerCase())
+    )
+    console.log(1)
+  }
 }
 </script>
 
