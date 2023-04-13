@@ -20,7 +20,9 @@
           :key="ind"
           class="ps-2"
           :style="[
-            hideCol.includes(singleData) ? { visibility: 'collapse' } : { visibility: 'visible' }
+            hideCol.includes(singleData.name)
+              ? { visibility: 'collapse' }
+              : { visibility: 'visible' }
           ]"
         />
       </colgroup>
@@ -29,31 +31,30 @@
           v-for="(singleData, ind) in tableHeaders"
           :key="ind"
           class="p-2"
-          @mouseenter="showSettings.push(singleData)"
-          @mouseleave="showSettings = showSettings.filter((e) => e !== singleData)"
+          @mouseenter="showSettings.push(singleData.name)"
+          @mouseleave="showSettings = showSettings.filter((e) => e !== singleData.name)"
         >
           <span
-            v-if="!showSettings.includes(singleData)"
+            v-if="!showSettings.includes(singleData.name)"
             style="text-transform: capitalize; cursor: pointer"
-            >{{ singleData.slice(0, 14) }}
-            <span v-if="singleData.length > 14">..</span>
+            >{{ singleData.name }}
           </span>
           <span v-else>
             <span
               style="color: grey; font-size: 12px; text-transform: capitalize; margin-right: 5px"
             >
-              {{ singleData.slice(0, 14) }}:
+              {{ singleData.name.slice(0, 14) }}:
             </span>
             <img
               src="@/assets/hidden.png"
               alt="hidden"
               style="width: 20px; margin-right: 5px; cursor: pointer"
-              @click="hideCol.push(singleData)"
+              @click="hideCol.push(singleData.name)"
             />
             <span
               class="settingsCol"
-              v-if="typeof compTable[0][singleData] !== 'object'"
-              @click="sortData(singleData, ind)"
+              v-if="typeof compTable[0][singleData.from] !== 'object'"
+              @click="sortData(singleData.from, ind)"
             >
               <img
                 v-if="filterActive === ind"
@@ -72,7 +73,11 @@
           v-for="(singleData, ind) in tableHeaders"
           :key="ind"
         >
-          <InputComponent :field="singleData" :in-case="1" @some-event="filterArr"></InputComponent>
+          <InputComponent
+            :field="singleData.name"
+            :in-case="1"
+            @some-event="filterArr"
+          ></InputComponent>
         </th>
       </tr>
       <tbody>
@@ -84,19 +89,19 @@
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(conc, index) in config" :key="index" style="min-width: 10vw">
-            {{ filterCol(item, conc).toString() }}
+            {{ filterCol(item, conc.value).toString() }}
           </td>
         </tr>
       </tbody>
-      <tr class="mb-5">
+      <!-- <tr class="mb-5">
         <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
-          <NewObject :field="singleData" @add-event="addToArr"></NewObject>
+          <NewObject :field="singleData.name" @add-event="addToArr"></NewObject>
         </th>
-      </tr>
+      </tr> -->
     </table>
   </div>
 
-  <button class="btn btn-primary fw-bold" @click="userTable.push(newObj)">Add data</button>
+  <!-- <button class="btn btn-primary fw-bold" @click="userTable.push(newObj)">Add data</button> -->
 
   <button class="btn btn-success float-end fw-bold" @click="generateCSV()">Download XLSX</button>
 </template>
@@ -104,7 +109,7 @@
 <script setup>
 import { ref } from 'vue'
 import InputComponent from './InputComponent.vue'
-import NewObject from './NewObject.vue'
+// import NewObject from './NewObject.vue'
 
 let hideCol = ref([])
 let showSettings = ref([])
@@ -128,15 +133,16 @@ const origin = [...props.dataTable]
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
 let recNumbers = ref(props.numbers)
-let tableHeaders = Object.keys(compTable.value[0])
+let tableHeaders = ref(props.config)
+// let tableHeaders = Object.keys(props.config)
 
 // Add to array
 
-let newObj = ref({})
+// let newObj = ref({})
 
-const addToArr = (val) => {
-  newObj.value[val.field] = val.userInput
-}
+// const addToArr = (val) => {
+//   newObj.value[val.field] = val.userInput
+// }
 
 // Fixed row
 
@@ -162,6 +168,8 @@ const filterMinAr = (val) => {
 }
 
 // Sorts
+
+// sort how to do with config headers
 
 let filterActive = ref()
 

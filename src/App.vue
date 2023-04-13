@@ -10,10 +10,11 @@ import TableComponent from './components/TableComponent.vue'
 let users = ref()
 
 const conf = {
-  id: 'id',
-  status: 'status.name',
-  building: 'building.status.name',
-  profile: 'profile.properties[0].value'
+  id: { name: 'id', from: 'id', value: 'id' },
+  status: { name: 'status', from: 'status', value: 'status.name' },
+  building: { name: 'building', from: 'building', value: 'building.status.name' },
+  profile: { name: 'profile one', from: 'profile', value: 'profile.properties[0].value' },
+  profile2: { name: 'profile two', from: 'profile', value: 'profile.properties[1].value' }
 }
 
 const fetchCHeck = () => {
