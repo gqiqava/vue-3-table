@@ -8,23 +8,25 @@
     v-model="userInput"
     @input="$emit('someEvent', { userInput, field })"
   />
-  <div class="row" v-else>
-    <input
-      type="text"
-      class="form-control col"
-      style="border: none; border-radius: 0px"
-      placeholder="from"
-      v-model="minVal"
-      @input="$emit('filterMin', { minVal, maxVal, field })"
-    />
-    <input
-      type="text"
-      class="form-control col"
-      style="border: none; border-radius: 0px"
-      placeholder="to"
-      v-model="maxVal"
-      @input="$emit('filterMin', { minVal, maxVal, field })"
-    />
+  <div class="container" v-else>
+    <div class="row">
+      <input
+        type="text"
+        class="form-control col"
+        style="border: none; border-radius: 0px"
+        placeholder="from"
+        v-model="minVal"
+        @input="$emit('filterMin', { minVal, maxVal, field })"
+      />
+      <input
+        type="text"
+        class="form-control col"
+        style="border: none; border-radius: 0px"
+        placeholder="to"
+        v-model="maxVal"
+        @input="$emit('filterMin', { minVal, maxVal, field })"
+      />
+    </div>
   </div>
 </template>
 

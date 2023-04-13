@@ -25,13 +25,53 @@
         />
       </colgroup>
       <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
-        <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
+        <th
+          v-for="(singleData, ind) in tableHeaders"
+          :key="ind"
+          class="p-2"
+          @mouseenter="showSettings.push(singleData)"
+          @mouseleave="showSettings = showSettings.filter((e) => e !== singleData)"
+        >
           <span
-            @click="hideCol.push(singleData)"
+            v-if="!showSettings.includes(singleData)"
             style="text-transform: capitalize; cursor: pointer"
-            >{{ singleData.slice(0, 14) }}<span v-if="singleData.length > 14">..</span>
+            >{{ singleData.slice(0, 14) }}
+            <span v-if="singleData.length > 14">..</span>
           </span>
-          <button
+          <span v-else>
+            <span
+              style="color: grey; font-size: 12px; text-transform: capitalize; margin-right: 5px"
+            >
+              {{ singleData.slice(0, 14) }}:
+            </span>
+            <img
+              src="@/assets/hidden.png"
+              alt="hidden"
+              style="width: 20px; margin-right: 5px; cursor: pointer"
+              @click="hideCol.push(singleData)"
+            />
+            <span
+              style="cursor: pointer"
+              v-if="typeof compTable[0][singleData] !== 'object'"
+              @click="sortData(singleData, ind)"
+            >
+              <img
+                v-if="filterActive === ind"
+                src="@/assets/filterActive.png"
+                style="width: 20px"
+              />
+              <img v-else src="@/assets/filter.png" style="width: 20px" />
+            </span>
+            <span>
+              <InputComponent
+                v-if="recNumbers?.includes(singleData)"
+                :field="singleData"
+                :in-case="2"
+                @filter-min="filterMinAr"
+              ></InputComponent>
+            </span>
+          </span>
+          <!-- <button
             type="button"
             @click="sortData(singleData, ind)"
             class="btn btn-light p-1 fw-bold border-0"
@@ -39,7 +79,7 @@
           >
             <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 20px" />
             <img v-else src="@/assets/filter.png" style="width: 20px" />
-          </button>
+          </button> -->
         </th>
       </tr>
       <tr
@@ -47,7 +87,7 @@
         :style="{ top: `50px` }"
         style="background-color: #f5fbff"
       >
-        <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
+        <!-- <th v-for="(singleData, ind) in tableHeaders" :key="ind" class="p-2">
           <InputComponent
             v-if="recNumbers?.includes(singleData)"
             :field="singleData"
@@ -61,19 +101,24 @@
               compTable[0][singleData] !== undefined
             "
           >
-            <!-- <span v-for="dec in Object.entries(compTable[0][singleData])">
+            <span v-for="dec in Object.entries(compTable[0][singleData])">
               <span
                 @click="showParam(dec[0], singleData)"
                 :class="{ activeFilter: filteredCol === dec[0] && filteredCol2 === singleData }"
                 class="subCat"
                 >{{ dec[0] }}
               </span>
-            </span> -->
+            </span>
           </div>
-        </th>
+        </th> -->
       </tr>
       <tr>
-        <th class="p-1" v-for="(singleData, ind) in tableHeaders" :key="ind">
+        <th
+          class="p-1 sticky-top"
+          style="top: 40px; background: #ffffff"
+          v-for="(singleData, ind) in tableHeaders"
+          :key="ind"
+        >
           <InputComponent :field="singleData" :in-case="1" @some-event="filterArr"></InputComponent>
         </th>
       </tr>
@@ -82,7 +127,7 @@
           v-for="(item, ind) in userTable"
           :key="ind"
           :class="{ stickyRow: fixedRows.includes(ind) }"
-          :style="{ top: `${fixedRows.indexOf(ind) * 65 + 115}px` }"
+          :style="{ top: `${fixedRows.indexOf(ind) * 41 + 97}px` }"
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(conc, index) in config" :key="index" style="min-width: 10vw">
@@ -116,16 +161,8 @@ let filteredCol = ref({})
 let filteredCol2 = ref({})
 let filterActive = ref()
 let hideCol = ref([])
+let showSettings = ref([])
 let fixedRows = ref([])
-
-const filterCol = (from, ...selectors) =>
-  [...selectors].map((s) =>
-    s
-      .replace(/\[([^\[\]]*)\]/g, '.$1.')
-      .split('.')
-      .filter((t) => t !== '')
-      .reduce((prev, cur) => prev && prev[cur], from)
-  )
 
 const props = defineProps({
   dataTable: {
@@ -148,6 +185,15 @@ let userTable = ref(props.dataTable)
 let recNumbers = ref(props.numbers)
 let tableHeaders = Object.keys(compTable.value[0])
 
+const filterCol = (from, ...selectors) =>
+  [...selectors].map((s) =>
+    s
+      .replace(/\[([^\[\]]*)\]/g, '.$1.')
+      .split('.')
+      .filter((t) => t !== '')
+      .reduce((prev, cur) => prev && prev[cur], from)
+  )
+
 const filterArr = (val) => {
   // inputArr.value[val.field] = val.userInput
 
@@ -158,14 +204,18 @@ const filterArr = (val) => {
   //   )
   // }
 
-  if (typeof userTable.value[0][val.field] !== 'string') {
-    userTable.value = compTable.value.filter((e) =>
+  console.log(val.field)
+
+  if (typeof compTable.value[0][val.field] !== 'string') {
+    userTable.value = compTable.value.filter((e) => {
       JSON.stringify(e[val.field]).includes(val.userInput)
-    )
+      console.log(JSON.stringify(e[val.field]).toLowerCase().includes(val.userInput.toLowerCase()))
+    })
   } else {
     userTable.value = compTable.value.filter((e) =>
       e[val.field].toLowerCase().includes(val.userInput.toLowerCase())
     )
+    console.log(1)
   }
 }
 
@@ -206,7 +256,6 @@ const filterMinAr = (val) => {
 const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
     filterActive.value = val2
-    console.log(val, val2)
     if (recNumbers.value.includes(val)) {
       userTable.value.sort((a, b) => a[val] - b[val])
     } else {
