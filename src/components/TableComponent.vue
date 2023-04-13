@@ -62,14 +62,6 @@
               />
               <img v-else src="@/assets/filter.png" style="width: 20px" />
             </span>
-            <span>
-              <InputComponent
-                v-if="recNumbers?.includes(singleData)"
-                :field="singleData"
-                :in-case="2"
-                @filter-min="filterMinAr"
-              ></InputComponent>
-            </span>
           </span>
           <!-- <button
             type="button"
