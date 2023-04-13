@@ -1,5 +1,5 @@
 <template>
-  <div class="m-5">
+  <div class="m-5" style="font-family: 'Roboto Mono', monospace">
     <TableComponent :data-table="users" :config="conf" :numbers="['id']" />
   </div>
 </template>
@@ -61,4 +61,10 @@ const fetchCHeck = () => {
 fetchCHeck()
 </script>
 
-<style scoped></style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap');
+
+body {
+  font-family: 'Roboto Mono', monospace;
+}
+</style>
