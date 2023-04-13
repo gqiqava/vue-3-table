@@ -51,7 +51,7 @@
               @click="hideCol.push(singleData)"
             />
             <span
-              style="cursor: pointer"
+              class="settingsCol"
               v-if="typeof compTable[0][singleData] !== 'object'"
               @click="sortData(singleData, ind)"
             >
@@ -243,19 +243,16 @@ const filterArr = (val) => {
   margin-right: 5px;
   cursor: pointer;
 }
-.subCat {
-  background-color: #acdadd;
-  padding: 5px 8px 5px 8px;
-  border-radius: 10px;
+
+.settingsCol {
+  /* background-color: #ffffff;
+  border: 2px dashed #5e89ff;
+  padding: 5px;
+  border-radius: 10px; */
   margin-right: 5px;
   cursor: pointer;
 }
-.activeFilter {
-  background-color: #acdadd;
-  border: 2px dashed #238086;
-  padding: 3px 5px 3px 5px;
-  border-radius: 10px;
-}
+
 .stickyRow {
   position: sticky;
   box-shadow: inset 0em -0.15em #acdadd;
