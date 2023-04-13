@@ -39,8 +39,6 @@
           >
             <img v-if="filterActive === ind" src="@/assets/filterActive.png" style="width: 20px" />
             <img v-else src="@/assets/filter.png" style="width: 20px" />
-            <i class="fa-solid fa-user"></i>
-            <i class="fa-solid fa-user"></i>
           </button>
         </th>
       </tr>
@@ -63,14 +61,14 @@
               compTable[0][singleData] !== undefined
             "
           >
-            <span v-for="dec in Object.entries(compTable[0][singleData])">
+            <!-- <span v-for="dec in Object.entries(compTable[0][singleData])">
               <span
                 @click="showParam(dec[0], singleData)"
-                :class="{ activeFilter: filteredCol === dec[0] }"
+                :class="{ activeFilter: filteredCol === dec[0] && filteredCol2 === singleData }"
                 class="subCat"
-                >{{ dec[0] }}</span
-              >
-            </span>
+                >{{ dec[0] }}
+              </span>
+            </span> -->
           </div>
         </th>
       </tr>
@@ -87,11 +85,8 @@
           :style="{ top: `${fixedRows.indexOf(ind) * 65 + 115}px` }"
           @dblclick="addToFixed(ind)"
         >
-          <td class="" v-for="(conc, i) in item" :key="i" style="min-width: 10vw">
-            <span v-if="typeof conc === 'object'">{{
-              conc[filteredCol] ? conc[filteredCol] : JSON.stringify(conc).replace(/[\{\}"]+/g, ' ')
-            }}</span>
-            <span v-else>{{ conc }} </span>
+          <td class="" v-for="(conc, index) in config" :key="index" style="min-width: 10vw">
+            {{ filterCol(item, conc).toString() }}
           </td>
         </tr>
       </tbody>
@@ -109,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import InputComponent from './InputComponent.vue'
 import NewObject from './NewObject.vue'
 
@@ -118,13 +113,27 @@ let csvString = ref()
 let inputArr = ref({})
 let newObj = ref({})
 let filteredCol = ref({})
+let filteredCol2 = ref({})
 let filterActive = ref()
 let hideCol = ref([])
 let fixedRows = ref([])
 
+const filterCol = (from, ...selectors) =>
+  [...selectors].map((s) =>
+    s
+      .replace(/\[([^\[\]]*)\]/g, '.$1.')
+      .split('.')
+      .filter((t) => t !== '')
+      .reduce((prev, cur) => prev && prev[cur], from)
+  )
+
 const props = defineProps({
   dataTable: {
     type: Array,
+    required: true
+  },
+  config: {
+    type: Object,
     required: true
   },
   numbers: {
@@ -164,11 +173,6 @@ const addToArr = (val) => {
   newObj.value[val.field] = val.userInput
 }
 
-// const hideCol = (val) => {
-//   console.log(val)
-//   delete thisIsObject[val]
-// }
-
 const addToFixed = (val) => {
   if (fixedRows.value.includes(val)) {
     fixedRows.value = fixedRows.value.filter((item) => item !== val)
@@ -177,13 +181,16 @@ const addToFixed = (val) => {
   }
 }
 
-const showParam = (val) => {
-  if (filteredCol.value === val) {
-    filteredCol.value = null
-  } else {
-    filteredCol.value = val
-  }
-}
+// const showParam = (val, val2) => {
+//   console.log(val, val2)
+//   if (filteredCol.value === val && filteredCol2.value === val2) {
+//     filteredCol.value = null
+//     filteredCol2.value = null
+//   } else {
+//     filteredCol.value = val
+//     filteredCol2.value = val2
+//   }
+// }
 
 const filterMinAr = (val) => {
   console.log(val.minVal, val)
