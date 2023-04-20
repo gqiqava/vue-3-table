@@ -74,7 +74,7 @@
           :key="ind"
         >
           <InputComponent
-            :field="singleData.name"
+            :field="singleData.from"
             :in-case="1"
             @some-event="filterArr"
           ></InputComponent>
@@ -185,8 +185,8 @@ let csvString = ref()
 
 const generateCSV = () => {
   csvString.value = [
-    Object.keys(userTable.value[0]),
-    ...userTable.value.map((item) =>
+    Object.keys(parsedArray.value[0]),
+    ...parsedArray.value.map((item) =>
       Object.values(item).map((e) =>
         typeof e === 'object'
           ? JSON.stringify(e).replace(/[\{\}\,"]+/g, ' ')
@@ -227,19 +227,19 @@ const parseArray = () => {
 
 parseArray()
 
-// console.log(parsedArray.value)
-
+let originalArray = parsedArray.value
 const filterArr = (val) => {
-  if (typeof compTable.value[0][val.field] !== 'string') {
-    userTable.value = compTable.value.filter((e) => {
+  if (typeof originalArray[0][val.field] !== 'string') {
+    console.log(1, val.field)
+    console.log(2, originalArray[0])
+    parsedArray.value = originalArray.filter((e) => {
       JSON.stringify(e[val.field]).includes(val.userInput)
       console.log(JSON.stringify(e[val.field]).toLowerCase().includes(val.userInput.toLowerCase()))
     })
   } else {
-    userTable.value = compTable.value.filter((e) =>
+    parsedArray.value = originalArray.filter((e) =>
       e[val.field].toLowerCase().includes(val.userInput.toLowerCase())
     )
-    console.log(1)
   }
 }
 </script>
