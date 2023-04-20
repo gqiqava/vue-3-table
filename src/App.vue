@@ -13,7 +13,7 @@ const conf = {
   id: { name: 'id', from: 'id', value: 'id' },
   status: { name: 'status', from: 'status', value: 'status.name' },
   building: { name: 'building', from: 'building', value: 'building.status.name' },
-  profile: { name: 'profile one', from: 'profile', value: 'profile.properties[0].value' },
+  profile: { name: 'profile one', from: 'profile', value: 'profile.properties[3].value' },
   profile2: { name: 'profile two', from: 'profile', value: 'profile.properties[1].value' }
 }
 
@@ -55,7 +55,6 @@ const fetchCHeck = () => {
     .then((res) => res.json())
     .then((res) => {
       users.value = res.data.apartments
-      console.log(res.data.apartments)
     })
 }
 
