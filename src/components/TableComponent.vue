@@ -130,19 +130,21 @@ const props = defineProps({
 
 const origin = [...props.dataTable]
 
+console.log(props.config)
+
 let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
 let recNumbers = ref(props.numbers)
 let tableHeaders = ref(props.config)
-// let tableHeaders = Object.keys(props.config)
+let parsedArray = ref([])
 
-// Add to array
+const parseArray = () => {
+  for (let i = 0; i < compTable.value.length; i++) {
+    console.log(compTable.value[i])
+  }
+}
 
-// let newObj = ref({})
-
-// const addToArr = (val) => {
-//   newObj.value[val.field] = val.userInput
-// }
+parseArray()
 
 // Fixed row
 
