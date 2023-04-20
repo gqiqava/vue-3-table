@@ -53,7 +53,7 @@
             />
             <span
               class="settingsCol"
-              v-if="typeof compTable[0][singleData.from] !== 'object'"
+              v-if="typeof parsedArray[0][singleData.from] !== 'object'"
               @click="sortData(singleData.from, ind)"
             >
               <img
@@ -138,8 +138,6 @@ let parsedArray = ref([])
 
 // Fixed row
 
-console.log(compTable.value)
-
 let fixedRows = ref([])
 
 const addToFixed = (val) => {
@@ -171,13 +169,13 @@ const sortData = (val, val2) => {
   if (filterActive.value !== val2) {
     filterActive.value = val2
     if (recNumbers.value.includes(val)) {
-      userTable.value.sort((a, b) => a[val] - b[val])
+      parsedArray.value.sort((a, b) => a[val] - b[val])
     } else {
-      userTable.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
+      parsedArray.value.sort((a, b) => (a[val] > b[val] ? 1 : b[val] > a[val] ? -1 : 0))
     }
   } else {
     filterActive.value = null
-    userTable.value = origin
+    // parsedArray.value = origin
   }
 }
 
