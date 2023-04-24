@@ -1,6 +1,6 @@
 <template>
   <div class="tableResp">
-    <table class="table table-striped table-bordered container-fluid border">
+    <table class="table table-striped table-bordered container-fluid">
       <caption style="caption-side: top" v-if="hideCol.length > 0">
         <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
         <span
@@ -85,7 +85,10 @@
           v-for="(item, ind) in parsedArray"
           :key="ind"
           :class="{ stickyRow: fixedRows.includes(ind) }"
-          :style="{ top: `${fixedRows.indexOf(ind) * 41 + 88}px` }"
+          :style="{
+            top: `${fixedRows.indexOf(ind) * 41 + 88}px`,
+            backgroundColor: fixedRows.includes(ind) ? props.theme : '#ffffff'
+          }"
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(column, index) in item" :key="index" style="min-width: 10vw">
@@ -264,16 +267,12 @@ const filterArr = (val) => {
 
 .settingsCol {
   /* background-color: #ffffff;
-  border: 2px dashed #5e89ff;
-  padding: 5px;
-  border-radius: 10px; */
+  padding: 5px;*/
   margin-right: 5px;
   cursor: pointer;
 }
 
 .stickyRow {
   position: sticky;
-  box-shadow: inset 0em -0.15em #acdadd;
-  background: #ffffff;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="m-5" style="font-family: 'Roboto Mono', monospace">
-    <TableComponent :data-table="users" :config="conf" :numbers="['id']" :theme="'#fc9796'" />
+    <TableComponent :data-table="users" :config="conf" :numbers="['id']" :theme="'#a6d3fb'" />
   </div>
 </template>
 <script setup>
@@ -8,13 +8,18 @@ import { ref } from 'vue'
 import TableComponent from './components/TableComponent.vue'
 
 let users = ref()
+let locals = ref('en')
 
 const conf = {
   id: { name: 'id', from: 'id', value: 'id' },
-  status: { name: 'status', from: 'status', value: 'status.name' },
-  building: { name: 'building', from: 'building', value: 'building.status.name' },
-  profile: { name: 'profile one', from: 'profile', value: 'profile.properties[3].value' },
-  profile2: { name: 'profile two', from: 'profile', value: 'profile.properties[1].value' }
+  status: { name: 'status', from: 'status', value: `status.localization[${locals.value}]` },
+  building: {
+    name: 'building',
+    from: 'building',
+    value: `building.status.localization[${locals.value}]`
+  },
+  profile: { name: 'profile one', from: 'profile', value: 'profile.properties[0].value' },
+  profile2: { name: 'profile two', from: 'profile', value: 'profile.properties[2].value' }
 }
 
 const fetchCHeck = () => {
@@ -30,11 +35,19 @@ const fetchCHeck = () => {
         apartments {
           id
           status {
+            localization{
+              en
+              ka
+            }
             name
           }
           building {
             id
             status {
+              localization{
+                en
+                ka
+              }
               name
             }
             state {
