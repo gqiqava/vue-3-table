@@ -26,7 +26,7 @@
           ]"
         />
       </colgroup>
-      <tr class="shadow-sm sticky-top" style="background-color: #f5fbff">
+      <tr class="shadow-sm sticky-top" :style="{ backgroundColor: props.theme }">
         <th
           v-for="(singleData, ind) in tableHeaders"
           :key="ind"
@@ -85,7 +85,7 @@
           v-for="(item, ind) in parsedArray"
           :key="ind"
           :class="{ stickyRow: fixedRows.includes(ind) }"
-          :style="{ top: `${fixedRows.indexOf(ind) * 41 + 97}px` }"
+          :style="{ top: `${fixedRows.indexOf(ind) * 41 + 88}px` }"
           @dblclick="addToFixed(ind)"
         >
           <td class="" v-for="(column, index) in item" :key="index" style="min-width: 10vw">
@@ -125,6 +125,10 @@ const props = defineProps({
   },
   numbers: {
     type: Array
+  },
+  theme: {
+    type: String,
+    default: '#f5fbff'
   }
 })
 

@@ -1,6 +1,6 @@
 <template>
   <div class="m-5" style="font-family: 'Roboto Mono', monospace">
-    <TableComponent :data-table="users" :config="conf" :numbers="['id']" />
+    <TableComponent :data-table="users" :config="conf" :numbers="['id']" :theme="'#fc9796'" />
   </div>
 </template>
 <script setup>
