@@ -15,6 +15,7 @@
         <span v-else>Lock row</span>
       </li>
       <li @click="removeRow">Remove row</li>
+      <li v-if="undoObj" @click="undoHandler">Restore last row</li>
       <li>option one</li>
       <li>option one</li>
     </ul>
@@ -151,7 +152,10 @@ let parsedArray = ref([])
 
 let undoObj = ref()
 const undoHandler = () => {
-  parsedArray.value.splice(curretRow.value, 0, undoObj.value)
+  if (undoObj.value) {
+    parsedArray.value.splice(curretRow.value, 0, undoObj.value)
+  }
+  undoObj.value = null
 }
 
 const keyupHandler = (event) => {
@@ -348,6 +352,6 @@ const filterArr = (val) => {
   background-color: #636363;
 }
 .cntMenu ul li {
-  padding: 3px 13px 3px 13px;
+  padding: 3px 20px 3px 20px;
 }
 </style>
