@@ -11,18 +11,33 @@
   >
     <ul class="px-0" style="list-style-type: none">
       <li @click="addToFixed">
-        <span v-if="fixedRows.includes(curretRow)">Unlock row</span>
-        <span v-else>Lock row</span>
+        <span v-if="fixedRows.includes(curretRow)">
+          Unlock Row
+          <img src="@/assets/padlock-unlock.png" style="width: 16px; margin-bottom: 5px" alt="" />
+        </span>
+        <span v-else>
+          Lock Row
+          <img src="@/assets/secured-lock.png" style="width: 16px; margin-bottom: 5px" alt="" />
+        </span>
       </li>
-      <li @click="removeRow">Remove row</li>
-      <li v-if="undoObj" @click="undoHandler">Restore last row</li>
-      <li>option one</li>
-      <li>option one</li>
+      <li @click="removeRow">
+        Remove Row
+        <img src="@/assets/trash-bin.png" style="width: 18px; margin-bottom: 5px" alt="" />
+      </li>
+      <li v-if="undoObj" @click="undoHandler">
+        Restore Row
+        <img src="@/assets/undo.png" style="width: 18px; margin-bottom: 5px" alt="" />
+      </li>
+      <li>Another feature</li>
+      <li>Even more featu</li>
     </ul>
   </div>
 
   <div class="tableResp">
-    <table class="table table-striped table-bordered container-fluid" style="z-index: 0">
+    <table
+      class="table table-striped table-bordered table-hover container-fluid"
+      style="z-index: 0"
+    >
       <caption style="caption-side: top" v-if="hideCol.length > 0">
         <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
         <span
@@ -133,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import InputComponent from './InputComponent.vue'
 // import NewObject from './NewObject.vue'
 import { onClickOutside } from '@vueuse/core'
@@ -156,6 +171,7 @@ const undoHandler = () => {
     parsedArray.value.splice(curretRow.value, 0, undoObj.value)
   }
   undoObj.value = null
+  showContMenu.value = false
 }
 
 const keyupHandler = (event) => {
@@ -165,6 +181,8 @@ const keyupHandler = (event) => {
 }
 
 document.addEventListener('keyup', keyupHandler)
+
+onUnmounted(() => document.removeEventListener('keyup', keyupHandler))
 
 const props = defineProps({
   dataTable: {
@@ -313,7 +331,7 @@ const filterArr = (val) => {
 }
 </script>
 
-<style scoped>
+<style>
 .tableResp {
   overflow: auto;
   height: 100vh;
@@ -352,6 +370,6 @@ const filterArr = (val) => {
   background-color: #636363;
 }
 .cntMenu ul li {
-  padding: 3px 20px 3px 20px;
+  padding: 5px 25px 5px 25px;
 }
 </style>
