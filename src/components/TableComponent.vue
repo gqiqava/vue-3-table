@@ -1,6 +1,27 @@
 <template>
+  <div
+    ref="target"
+    v-show="showContMenu"
+    class="cntMenu"
+    :style="{
+      position: 'absolute',
+      left: `${divX}px`,
+      top: `${divY}px`
+    }"
+  >
+    <ul class="px-0" style="list-style-type: none">
+      <li @click="addToFixed">
+        <span v-if="fixedRows.includes(curretRow)">Unlock row</span>
+        <span v-else>Lock row</span>
+      </li>
+      <li @click="removeRow">Remove row</li>
+      <li>option one</li>
+      <li>option one</li>
+    </ul>
+  </div>
+
   <div class="tableResp">
-    <table class="table table-striped table-bordered container-fluid">
+    <table class="table table-striped table-bordered container-fluid" style="z-index: 0">
       <caption style="caption-side: top" v-if="hideCol.length > 0">
         <img src="@/assets/hidden.png" alt="hidden" style="width: 20px; margin-right: 5px" />
         <span
@@ -87,9 +108,10 @@
           :class="{ stickyRow: fixedRows.includes(ind) }"
           :style="{
             top: `${fixedRows.indexOf(ind) * 41 + 88}px`,
-            backgroundColor: fixedRows.includes(ind) ? props.theme : '#ffffff'
+            backgroundColor: fixedRows.includes(ind) ? props.theme : '#ffffff',
+            zIndex: '1'
           }"
-          @dblclick="addToFixed(ind)"
+          @contextmenu.prevent="handler(ind)"
         >
           <td class="" v-for="(column, index) in item" :key="index" style="min-width: 10vw">
             {{ column }}
@@ -113,9 +135,32 @@
 import { ref } from 'vue'
 import InputComponent from './InputComponent.vue'
 // import NewObject from './NewObject.vue'
+import { onClickOutside } from '@vueuse/core'
+
+const target = ref(null)
+
+onClickOutside(target, () => (showContMenu.value = false))
 
 let hideCol = ref([])
 let showSettings = ref([])
+let divX = ref(30)
+let divY = ref(200)
+let showContMenu = ref(false)
+let curretRow = ref()
+let parsedArray = ref([])
+
+let undoObj = ref()
+const undoHandler = () => {
+  parsedArray.value.splice(curretRow.value, 0, undoObj.value)
+}
+
+const keyupHandler = (event) => {
+  if (event.ctrlKey && event.key === 'z') {
+    undoHandler()
+  }
+}
+
+document.addEventListener('keyup', keyupHandler)
 
 const props = defineProps({
   dataTable: {
@@ -141,18 +186,24 @@ let compTable = ref(props.dataTable)
 let userTable = ref(props.dataTable)
 let recNumbers = ref(props.numbers)
 let tableHeaders = ref(props.config)
-let parsedArray = ref([])
 
 // Fixed row
 
 let fixedRows = ref([])
 
-const addToFixed = (val) => {
-  if (fixedRows.value.includes(val)) {
-    fixedRows.value = fixedRows.value.filter((item) => item !== val)
+const addToFixed = () => {
+  if (fixedRows.value.includes(curretRow.value)) {
+    fixedRows.value = fixedRows.value.filter((item) => item !== curretRow.value)
   } else {
-    fixedRows.value.push(val)
+    fixedRows.value.push(curretRow.value)
   }
+
+  showContMenu.value = false
+}
+
+const removeRow = () => {
+  undoObj.value = parsedArray.value.splice(curretRow.value, 1)[0]
+  showContMenu.value = false
 }
 
 // Range
@@ -164,6 +215,13 @@ const filterMinAr = (val) => {
       parseFloat(e[val.field]) >= (val.minVal ? val.minVal : -Infinity) &&
       parseFloat(e[val.field]) <= (val.maxVal ? val.maxVal : Infinity)
   )
+}
+
+const handler = (ind) => {
+  curretRow.value = ind
+  divX.value = event.clientX + 15
+  divY.value = event.clientY
+  showContMenu.value = true
 }
 
 // Sorts
@@ -274,5 +332,22 @@ const filterArr = (val) => {
 
 .stickyRow {
   position: sticky;
+}
+
+.cntMenu {
+  border: 1px solid grey;
+  background-color: #303031;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: white;
+  border-radius: 16px;
+  z-index: 10;
+}
+
+.cntMenu ul li:hover {
+  background-color: #636363;
+}
+.cntMenu ul li {
+  padding: 3px 13px 3px 13px;
 }
 </style>
